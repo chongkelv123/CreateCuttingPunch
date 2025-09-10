@@ -30,11 +30,11 @@ namespace CreateCuttingPunch.Services
                 UFConstants.UF_all_subtype,
                 0); // Not a solid body
 
-        public TaggedObject[] Selection()
+        public SelectionModel Selections()
         {
             UI ui = UI.GetUI();
-            var selctionManager = ui.SelectionManager;
-            Selection.SelectionScope scope = NXOpen.Selection.SelectionScope.WorkPart;
+            var selectionManager = ui.SelectionManager;
+            Selection.SelectionScope scope = Selection.SelectionScope.WorkPart;
             string message = "Select a sketch or face for the punch creation";
             string title = "Select Sketch or Face";
 
@@ -47,54 +47,50 @@ namespace CreateCuttingPunch.Services
             // Create an array to hold the masks
             Selection.MaskTriple[] maskArray = new Selection.MaskTriple[] { faceMask, sketchMask };
 
-            Selection.SelectionAction action = NXOpen.Selection.SelectionAction.ClearAndEnableSpecific;
+            Selection.SelectionAction action = Selection.SelectionAction.ClearAndEnableSpecific;
             bool includeFeatures = false;
             bool keepHighlighted = false;
-            TaggedObject[] objectArray;
 
-            Selection.Response response = selctionManager.SelectTaggedObjects(
-                message,
-                title,
-                scope,
-                action,
-                includeFeatures,
-                keepHighlighted,
-                maskArray,
-                out objectArray
-                );
+            TaggedObject outObject;
+            Point3d cursor;
 
-            ProcessTaggedObject(objectArray);
+            Response response = selectionManager.SelectTaggedObject(
+                message, 
+                title, 
+                scope, 
+                action, 
+                includeFeatures, 
+                keepHighlighted, 
+                maskArray, 
+                out outObject, 
+                out cursor);                
 
-            return objectArray;
+            var result = ProcessTaggedObjectsToSelectionModel(outObject);
+
+            return result;
         }
 
-        private void ProcessTaggedObject(TaggedObject[] objectArray)
+        private SelectionModel ProcessTaggedObjectsToSelectionModel (TaggedObject obj)
         {
-            if (objectArray is null)
-                throw new ArgumentNullException(nameof(objectArray));
+            if (obj is null)
+                return new SelectionModel();
 
-            System.Diagnostics.Debugger.Launch();
-            objectArray.ToList().ForEach(obj =>
+            SelectionModel selModel = new SelectionModel();
+
+            if (obj is Body body)
             {
-                if (obj is Body body)
+                if (body.IsSheetBody)
                 {
-                    if(body.IsSheetBody)
-                    {
-                        NXDrawing.ShowMessageBox(
-                        $"Selected SheetBody: {body.Tag}",
-                        "Selection",
-                        NXMessageBox.DialogType.Information);
-                    }                    
+                    selModel.SheetBodyObject.Add(body);
                 }
+            }
 
-                if (obj is Sketch sketch)
-                {
-                    NXDrawing.ShowMessageBox(
-                        $"Selected Sketch: {sketch.Tag}", 
-                        "Selection", 
-                        NXMessageBox.DialogType.Information);                    
-                }
-            });
+            if (obj is Sketch sketch)
+            {
+                selModel.SketchObject.Add(sketch);
+            }            
+
+            return selModel;
         }
     }
 }
