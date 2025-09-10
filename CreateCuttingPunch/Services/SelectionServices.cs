@@ -19,11 +19,11 @@ namespace CreateCuttingPunch.Services
             _selectionModel = new SelectionModel();
         }
 
-        private Selection.MaskTriple GetFaceMask => 
+        private Selection.MaskTriple GetSheetBodyMask => 
             new Selection.MaskTriple (
-                UFConstants.UF_face_type,
-                UFConstants.UF_all_subtype,                
-                UFConstants.UF_UI_SEL_FEATURE_ANY_FACE); // Or UF_solid_type if needed
+                UFConstants.UF_solid_type,
+                UFConstants.UF_solid_body_subtype,                
+                UFConstants.UF_UI_SEL_FEATURE_SHEET_BODY); // Or UF_solid_type if needed
 
         private Selection.MaskTriple GetSketchMask => new Selection.MaskTriple(
                 UFConstants.UF_sketch_type,
@@ -39,7 +39,7 @@ namespace CreateCuttingPunch.Services
             string title = "Select Sketch or Face";
 
             // Mask for selecting any face
-            Selection.MaskTriple faceMask = GetFaceMask;
+            Selection.MaskTriple faceMask = GetSheetBodyMask;
 
             // Mask for selecting any sketch
             Selection.MaskTriple sketchMask = GetSketchMask;
@@ -63,8 +63,38 @@ namespace CreateCuttingPunch.Services
                 out objectArray
                 );
 
-            return objectArray;
+            ProcessTaggedObject(objectArray);
 
+            return objectArray;
+        }
+
+        private void ProcessTaggedObject(TaggedObject[] objectArray)
+        {
+            if (objectArray is null)
+                throw new ArgumentNullException(nameof(objectArray));
+
+            System.Diagnostics.Debugger.Launch();
+            objectArray.ToList().ForEach(obj =>
+            {
+                if (obj is Body body)
+                {
+                    if(body.IsSheetBody)
+                    {
+                        NXDrawing.ShowMessageBox(
+                        $"Selected SheetBody: {body.Tag}",
+                        "Selection",
+                        NXMessageBox.DialogType.Information);
+                    }                    
+                }
+
+                if (obj is Sketch sketch)
+                {
+                    NXDrawing.ShowMessageBox(
+                        $"Selected Sketch: {sketch.Tag}", 
+                        "Selection", 
+                        NXMessageBox.DialogType.Information);                    
+                }
+            });
         }
     }
 }

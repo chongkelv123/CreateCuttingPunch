@@ -44,8 +44,9 @@ namespace CreateCuttingPunch.Model
             this.control = control;
         }
 
-        public void ShowMessageBox(string title, NXMessageBox.DialogType msgboxType, string message)
+        public static void ShowMessageBox(string message, string title, NXMessageBox.DialogType msgboxType)
         {
+            UI ui = UI.GetUI();
             ui.NXMessageBox.Show(title, msgboxType, message);
         }
 
