@@ -64,10 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Const.cs" />
     <Compile Include="Controller\Control.cs" />
     <Compile Include="Main\MyProgram.cs" />
     <Compile Include="Main\Unload.cs" />
     <Compile Include="Model\NXDrawing.cs" />
+    <Compile Include="Model\ProjectInfoModel.cs" />
     <Compile Include="Model\SelectionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -75,6 +77,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AttributeManagerService.cs" />
+    <Compile Include="Services\FileManageService.cs" />
+    <Compile Include="Services\ProjectInfoService.cs" />
     <Compile Include="Services\SelectionServices.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>

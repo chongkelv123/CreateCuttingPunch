@@ -59,6 +59,18 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtTipLength = new System.Windows.Forms.TextBox();
             this.txtPunchLength = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtDwgCode = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cboItemName = new System.Windows.Forms.ComboBox();
+            this.cboMaterial = new System.Windows.Forms.ComboBox();
+            this.cboHRC = new System.Windows.Forms.ComboBox();
+            this.numericStnNo = new System.Windows.Forms.NumericUpDown();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.btnPathRetrieve = new System.Windows.Forms.Button();
             this.groupBox9.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -66,6 +78,8 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericStnNo)).BeginInit();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnCancel
@@ -118,6 +132,7 @@
             this.btnSaveProjInfo.TabIndex = 7;
             this.btnSaveProjInfo.Text = "Save to file";
             this.btnSaveProjInfo.UseVisualStyleBackColor = true;
+            this.btnSaveProjInfo.Click += new System.EventHandler(this.btnSaveProjInfo_Click);
             // 
             // chkRetriveProjInfo
             // 
@@ -128,6 +143,7 @@
             this.chkRetriveProjInfo.TabIndex = 6;
             this.chkRetriveProjInfo.Text = "Retrieve project info:";
             this.chkRetriveProjInfo.UseVisualStyleBackColor = true;
+            this.chkRetriveProjInfo.CheckedChanged += new System.EventHandler(this.chkRetriveProjInfo_CheckedChanged);
             // 
             // cboDesign
             // 
@@ -207,6 +223,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox1.Controls.Add(this.btnPathRetrieve);
             this.groupBox1.Controls.Add(this.txtPath);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -218,18 +235,16 @@
             // 
             // txtPath
             // 
-            this.txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPath.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.HistoryList;
             this.txtPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPath.Location = new System.Drawing.Point(6, 21);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(824, 22);
+            this.txtPath.Size = new System.Drawing.Size(707, 22);
             this.txtPath.TabIndex = 0;
             // 
             // groupBox6
             // 
-            this.groupBox6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox6.Controls.Add(this.lblSketchStatus);
             this.groupBox6.Controls.Add(this.lblSketchInstructions);
             this.groupBox6.Controls.Add(this.btnSelectSketch);
@@ -276,7 +291,7 @@
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Location = new System.Drawing.Point(516, 194);
+            this.pictureBox1.Location = new System.Drawing.Point(218, 194);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(332, 267);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -394,11 +409,132 @@
             this.txtPunchLength.Size = new System.Drawing.Size(80, 22);
             this.txtPunchLength.TabIndex = 0;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 156);
+            this.label11.Name = "label11";
+            this.label11.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label11.Size = new System.Drawing.Size(49, 16);
+            this.label11.TabIndex = 6;
+            this.label11.Text = "HRC:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 124);
+            this.label10.Name = "label10";
+            this.label10.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label10.Size = new System.Drawing.Size(87, 16);
+            this.label10.TabIndex = 6;
+            this.label10.Text = "MATERIAL:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 92);
+            this.label9.Name = "label9";
+            this.label9.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label9.Size = new System.Drawing.Size(126, 16);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "DRAWING CODE:";
+            // 
+            // txtDwgCode
+            // 
+            this.txtDwgCode.Location = new System.Drawing.Point(136, 88);
+            this.txtDwgCode.Name = "txtDwgCode";
+            this.txtDwgCode.Size = new System.Drawing.Size(150, 22);
+            this.txtDwgCode.TabIndex = 10;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 60);
+            this.label7.Name = "label7";
+            this.label7.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label7.Size = new System.Drawing.Size(94, 16);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "ITEM NAME:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 28);
+            this.label6.Name = "label6";
+            this.label6.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label6.Size = new System.Drawing.Size(105, 16);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "STATION NO.:";
+            // 
+            // cboItemName
+            // 
+            this.cboItemName.FormattingEnabled = true;
+            this.cboItemName.Location = new System.Drawing.Point(136, 55);
+            this.cboItemName.Name = "cboItemName";
+            this.cboItemName.Size = new System.Drawing.Size(150, 24);
+            this.cboItemName.TabIndex = 9;
+            // 
+            // cboMaterial
+            // 
+            this.cboMaterial.FormattingEnabled = true;
+            this.cboMaterial.Location = new System.Drawing.Point(136, 120);
+            this.cboMaterial.Name = "cboMaterial";
+            this.cboMaterial.Size = new System.Drawing.Size(150, 24);
+            this.cboMaterial.TabIndex = 11;
+            // 
+            // cboHRC
+            // 
+            this.cboHRC.FormattingEnabled = true;
+            this.cboHRC.Location = new System.Drawing.Point(136, 150);
+            this.cboHRC.Name = "cboHRC";
+            this.cboHRC.Size = new System.Drawing.Size(150, 24);
+            this.cboHRC.TabIndex = 12;
+            // 
+            // numericStnNo
+            // 
+            this.numericStnNo.Location = new System.Drawing.Point(136, 24);
+            this.numericStnNo.Name = "numericStnNo";
+            this.numericStnNo.Size = new System.Drawing.Size(150, 22);
+            this.numericStnNo.TabIndex = 8;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox5.Controls.Add(this.numericStnNo);
+            this.groupBox5.Controls.Add(this.cboHRC);
+            this.groupBox5.Controls.Add(this.cboMaterial);
+            this.groupBox5.Controls.Add(this.cboItemName);
+            this.groupBox5.Controls.Add(this.label6);
+            this.groupBox5.Controls.Add(this.label7);
+            this.groupBox5.Controls.Add(this.txtDwgCode);
+            this.groupBox5.Controls.Add(this.label9);
+            this.groupBox5.Controls.Add(this.label10);
+            this.groupBox5.Controls.Add(this.label11);
+            this.groupBox5.Location = new System.Drawing.Point(556, 193);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(349, 193);
+            this.groupBox5.TabIndex = 19;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Drawing Information:";
+            // 
+            // btnPathRetrieve
+            // 
+            this.btnPathRetrieve.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPathRetrieve.Location = new System.Drawing.Point(719, 16);
+            this.btnPathRetrieve.Name = "btnPathRetrieve";
+            this.btnPathRetrieve.Size = new System.Drawing.Size(108, 30);
+            this.btnPathRetrieve.TabIndex = 8;
+            this.btnPathRetrieve.Text = "Retrive Path...";
+            this.btnPathRetrieve.UseVisualStyleBackColor = true;
+            this.btnPathRetrieve.Click += new System.EventHandler(this.btnPathRetrieve_Click);
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(917, 703);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -422,6 +558,9 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericStnNo)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -459,5 +598,17 @@
         private System.Windows.Forms.TextBox txtPunchLength;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtDwgCode;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cboItemName;
+        private System.Windows.Forms.ComboBox cboMaterial;
+        private System.Windows.Forms.ComboBox cboHRC;
+        private System.Windows.Forms.NumericUpDown numericStnNo;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btnPathRetrieve;
     }
 }

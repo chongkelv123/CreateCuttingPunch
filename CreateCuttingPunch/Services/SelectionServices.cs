@@ -19,10 +19,10 @@ namespace CreateCuttingPunch.Services
             _selectionModel = new SelectionModel();
         }
 
-        private Selection.MaskTriple GetSheetBodyMask => 
-            new Selection.MaskTriple (
+        private Selection.MaskTriple GetSheetBodyMask =>
+            new Selection.MaskTriple(
                 UFConstants.UF_solid_type,
-                UFConstants.UF_solid_body_subtype,                
+                UFConstants.UF_solid_body_subtype,
                 UFConstants.UF_UI_SEL_FEATURE_SHEET_BODY); // Or UF_solid_type if needed
 
         private Selection.MaskTriple GetSketchMask => new Selection.MaskTriple(
@@ -34,7 +34,7 @@ namespace CreateCuttingPunch.Services
         {
             UI ui = UI.GetUI();
             var selectionManager = ui.SelectionManager;
-            Selection.SelectionScope scope = Selection.SelectionScope.WorkPart;
+            Selection.SelectionScope scope = Selection.SelectionScope.AnyInAssembly;
             string message = "Select a sketch or face for the punch creation";
             string title = "Select Sketch or Face";
 
@@ -55,22 +55,36 @@ namespace CreateCuttingPunch.Services
             Point3d cursor;
 
             Response response = selectionManager.SelectTaggedObject(
-                message, 
-                title, 
-                scope, 
-                action, 
-                includeFeatures, 
-                keepHighlighted, 
-                maskArray, 
-                out outObject, 
-                out cursor);                
+                message,
+                title,
+                scope,
+                action,
+                includeFeatures,
+                keepHighlighted,
+                maskArray,
+                out outObject,
+                out cursor);           
 
-            var result = ProcessTaggedObjectsToSelectionModel(outObject);
+            var result = ProcessTaggedObjectToSelectionModel(outObject);
 
             return result;
         }
 
-        private SelectionModel ProcessTaggedObjectsToSelectionModel (TaggedObject obj)
+        private void CreatePoint(Point3d cursor)
+        {
+            Part workPart = NXOpen.Session.GetSession().Parts.Work;            
+            
+            Point p1 = workPart.Points.CreatePoint(cursor);
+            p1.SetVisibility(SmartObject.VisibilityOption.Visible);
+
+            if (p1 is not null)
+                NXDrawing.ShowMessageBox(
+                    $"Point created at X:{cursor.X}, Y:{cursor.Y}, Z:{cursor.Z}", 
+                    "Point Created", 
+                    NXMessageBox.DialogType.Information);
+        }
+
+        private SelectionModel ProcessTaggedObjectToSelectionModel(TaggedObject obj)
         {
             if (obj is null)
                 return new SelectionModel();
@@ -88,7 +102,7 @@ namespace CreateCuttingPunch.Services
             if (obj is Sketch sketch)
             {
                 selModel.SketchObject.Add(sketch);
-            }            
+            }
 
             return selModel;
         }
