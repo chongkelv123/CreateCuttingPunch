@@ -13,6 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NXOpen.Routing;
+using System.IO;
 
 namespace CreateCuttingPunch.View
 {
@@ -78,7 +80,13 @@ namespace CreateCuttingPunch.View
 
         private void BtnApply_Click(object sender, EventArgs e)
         {
-            FileManageService.Get(TextPath);
+            var asmFiles = FileManageService.GetAssemblyFiles(TextPath);
+            string output = string.Empty;
+            asmFiles.ForEach(asmFiles => {
+                var f = System.IO.Path.GetFileNameWithoutExtension(asmFiles);
+                output += f + "\n";
+            });
+            NXDrawing.ShowMessageBox(output, "List Assembly files", NXMessageBox.DialogType.Information);
             control.Start();
             this.Close();
         }

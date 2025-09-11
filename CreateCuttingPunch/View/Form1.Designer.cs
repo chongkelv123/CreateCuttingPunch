@@ -42,6 +42,7 @@
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnPathRetrieve = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.lblSketchStatus = new System.Windows.Forms.Label();
@@ -59,18 +60,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtTipLength = new System.Windows.Forms.TextBox();
             this.txtPunchLength = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtDwgCode = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.cboItemName = new System.Windows.Forms.ComboBox();
-            this.cboMaterial = new System.Windows.Forms.ComboBox();
-            this.cboHRC = new System.Windows.Forms.ComboBox();
-            this.numericStnNo = new System.Windows.Forms.NumericUpDown();
+            this.listView1 = new System.Windows.Forms.ListView();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.btnPathRetrieve = new System.Windows.Forms.Button();
             this.groupBox9.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -78,7 +69,6 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericStnNo)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -232,6 +222,18 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Where would you like the Tooling Assembly to be saved to? Copy and paste the addr" +
     "ess here:";
+            // 
+            // btnPathRetrieve
+            // 
+            this.btnPathRetrieve.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPathRetrieve.Location = new System.Drawing.Point(719, 16);
+            this.btnPathRetrieve.Name = "btnPathRetrieve";
+            this.btnPathRetrieve.Size = new System.Drawing.Size(108, 30);
+            this.btnPathRetrieve.TabIndex = 8;
+            this.btnPathRetrieve.Text = "Retrive Path...";
+            this.btnPathRetrieve.UseVisualStyleBackColor = true;
+            this.btnPathRetrieve.Click += new System.EventHandler(this.btnPathRetrieve_Click);
             // 
             // txtPath
             // 
@@ -409,125 +411,25 @@
             this.txtPunchLength.Size = new System.Drawing.Size(80, 22);
             this.txtPunchLength.TabIndex = 0;
             // 
-            // label11
+            // listView1
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 156);
-            this.label11.Name = "label11";
-            this.label11.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label11.Size = new System.Drawing.Size(49, 16);
-            this.label11.TabIndex = 6;
-            this.label11.Text = "HRC:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 124);
-            this.label10.Name = "label10";
-            this.label10.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label10.Size = new System.Drawing.Size(87, 16);
-            this.label10.TabIndex = 6;
-            this.label10.Text = "MATERIAL:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 92);
-            this.label9.Name = "label9";
-            this.label9.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label9.Size = new System.Drawing.Size(126, 16);
-            this.label9.TabIndex = 6;
-            this.label9.Text = "DRAWING CODE:";
-            // 
-            // txtDwgCode
-            // 
-            this.txtDwgCode.Location = new System.Drawing.Point(136, 88);
-            this.txtDwgCode.Name = "txtDwgCode";
-            this.txtDwgCode.Size = new System.Drawing.Size(150, 22);
-            this.txtDwgCode.TabIndex = 10;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 60);
-            this.label7.Name = "label7";
-            this.label7.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label7.Size = new System.Drawing.Size(94, 16);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "ITEM NAME:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 28);
-            this.label6.Name = "label6";
-            this.label6.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label6.Size = new System.Drawing.Size(105, 16);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "STATION NO.:";
-            // 
-            // cboItemName
-            // 
-            this.cboItemName.FormattingEnabled = true;
-            this.cboItemName.Location = new System.Drawing.Point(136, 55);
-            this.cboItemName.Name = "cboItemName";
-            this.cboItemName.Size = new System.Drawing.Size(150, 24);
-            this.cboItemName.TabIndex = 9;
-            // 
-            // cboMaterial
-            // 
-            this.cboMaterial.FormattingEnabled = true;
-            this.cboMaterial.Location = new System.Drawing.Point(136, 120);
-            this.cboMaterial.Name = "cboMaterial";
-            this.cboMaterial.Size = new System.Drawing.Size(150, 24);
-            this.cboMaterial.TabIndex = 11;
-            // 
-            // cboHRC
-            // 
-            this.cboHRC.FormattingEnabled = true;
-            this.cboHRC.Location = new System.Drawing.Point(136, 150);
-            this.cboHRC.Name = "cboHRC";
-            this.cboHRC.Size = new System.Drawing.Size(150, 24);
-            this.cboHRC.TabIndex = 12;
-            // 
-            // numericStnNo
-            // 
-            this.numericStnNo.Location = new System.Drawing.Point(136, 24);
-            this.numericStnNo.Name = "numericStnNo";
-            this.numericStnNo.Size = new System.Drawing.Size(150, 22);
-            this.numericStnNo.TabIndex = 8;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(6, 21);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(337, 107);
+            this.listView1.TabIndex = 20;
+            this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // groupBox5
             // 
             this.groupBox5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox5.Controls.Add(this.numericStnNo);
-            this.groupBox5.Controls.Add(this.cboHRC);
-            this.groupBox5.Controls.Add(this.cboMaterial);
-            this.groupBox5.Controls.Add(this.cboItemName);
-            this.groupBox5.Controls.Add(this.label6);
-            this.groupBox5.Controls.Add(this.label7);
-            this.groupBox5.Controls.Add(this.txtDwgCode);
-            this.groupBox5.Controls.Add(this.label9);
-            this.groupBox5.Controls.Add(this.label10);
-            this.groupBox5.Controls.Add(this.label11);
+            this.groupBox5.Controls.Add(this.listView1);
             this.groupBox5.Location = new System.Drawing.Point(556, 193);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(349, 193);
+            this.groupBox5.Size = new System.Drawing.Size(349, 139);
             this.groupBox5.TabIndex = 19;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Drawing Information:";
-            // 
-            // btnPathRetrieve
-            // 
-            this.btnPathRetrieve.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPathRetrieve.Location = new System.Drawing.Point(719, 16);
-            this.btnPathRetrieve.Name = "btnPathRetrieve";
-            this.btnPathRetrieve.Size = new System.Drawing.Size(108, 30);
-            this.btnPathRetrieve.TabIndex = 8;
-            this.btnPathRetrieve.Text = "Retrive Path...";
-            this.btnPathRetrieve.UseVisualStyleBackColor = true;
-            this.btnPathRetrieve.Click += new System.EventHandler(this.btnPathRetrieve_Click);
+            this.groupBox5.Text = "Assembly Lists:";
             // 
             // UserForm
             // 
@@ -558,9 +460,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericStnNo)).EndInit();
             this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -598,17 +498,8 @@
         private System.Windows.Forms.TextBox txtPunchLength;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox txtDwgCode;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox cboItemName;
-        private System.Windows.Forms.ComboBox cboMaterial;
-        private System.Windows.Forms.ComboBox cboHRC;
-        private System.Windows.Forms.NumericUpDown numericStnNo;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btnPathRetrieve;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.GroupBox groupBox5;
     }
 }

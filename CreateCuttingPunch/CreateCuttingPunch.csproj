@@ -81,6 +81,7 @@
     <Compile Include="Services\FileManageService.cs" />
     <Compile Include="Services\ProjectInfoService.cs" />
     <Compile Include="Services\SelectionServices.cs" />
+    <Compile Include="Services\VersionFilterService.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
