@@ -82,6 +82,9 @@
     <Compile Include="Services\ProjectInfoService.cs" />
     <Compile Include="Services\SelectionServices.cs" />
     <Compile Include="Services\VersionFilterService.cs" />
+    <Compile Include="Validations\FormValidationData.cs" />
+    <Compile Include="Validations\FormValidator.cs" />
+    <Compile Include="Validations\ValidationResult.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

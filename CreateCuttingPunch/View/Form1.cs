@@ -1,32 +1,39 @@
-﻿using CreateCuttingPunch.Controller;
+﻿using CreateCuttingPunch.Constants;
+using CreateCuttingPunch.Controller;
 using CreateCuttingPunch.Model;
 using CreateCuttingPunch.Services;
-using CreateCuttingPunch.Constants;
+using CreateCuttingPunch.Validations;
 using NXOpen;
 using NXOpen.CAE.Xyplot;
+using NXOpen.Features;
+using NXOpen.Routing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NXOpen.Routing;
-using System.IO;
 
 namespace CreateCuttingPunch.View
 {
     public partial class UserForm : System.Windows.Forms.Form
     {
         Controller.Control control;
-        private readonly SelectionServices _selectionService;        
+        private readonly SelectionServices _selectionService;
+        private readonly FormValidator _validator;
+        private SelectionModel selectionModel;
 
-        public string TextPath 
-        {  
-            get => txtPath.Text.Trim(); 
-            set => txtPath.Text = value; 
+        bool showDebugMessage = false;
+
+        public string TextPath
+        {
+            get => txtPath.Text.Trim();
+            set => txtPath.Text = value;
         }
         public string TextModel
         {
@@ -40,13 +47,27 @@ namespace CreateCuttingPunch.View
         }
         public string TextCodePrefix
         {
-            get => txtCodePrefix.Text.Trim(); 
+            get => txtCodePrefix.Text.Trim();
             set => txtCodePrefix.Text = value;
         }
-        
+        public string TextAsmDrawingPath
+        {
+            get
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    var selectedItem = listView1.SelectedItems[0];
+                    var fullPath = selectedItem.Tag?.ToString();
+                    return fullPath;
+                }
+                return string.Empty;
+            }
+        }
+
+
         public string TextDesigner
         {
-            get => cboDesign.SelectedItem?.ToString().Trim() ?? string.Empty;
+            get => cboDesign.Text.Trim();
             set => cboDesign.Text = value;
         }
 
@@ -67,6 +88,9 @@ namespace CreateCuttingPunch.View
             InitializeComponent();
             this.control = control;
             _selectionService = new SelectionServices();
+            _validator = new FormValidator();
+            selectionModel = new SelectionModel();
+
             TextPunLength = AttributeManagerService.GetAttribute(
                 Const.Attributes.CATEGORY_TOOLINGINFO,
                 Const.Attributes.PUNCH_LENGTH
@@ -79,15 +103,9 @@ namespace CreateCuttingPunch.View
         }
 
         private void BtnApply_Click(object sender, EventArgs e)
-        {
-            var asmFiles = FileManageService.GetAssemblyFiles(TextPath);
-            string output = string.Empty;
-            asmFiles.ForEach(asmFiles => {
-                var f = System.IO.Path.GetFileNameWithoutExtension(asmFiles);
-                output += f + "\n";
-            });
-            NXDrawing.ShowMessageBox(output, "List Assembly files", NXMessageBox.DialogType.Information);
-            control.Start();
+        {    
+            //System.Diagnostics.Debugger.Launch();
+            control.Start(selectionModel);
             this.Close();
         }
 
@@ -95,8 +113,9 @@ namespace CreateCuttingPunch.View
         {
             this.Hide();
 
-            var selctions = _selectionService.Selections();
-            UpdateSelectLableStatus(selctions.IsSelected(), lblSketchStatus);
+            selectionModel = _selectionService.Selections();
+            UpdateSelectLableStatus(selectionModel.IsSelected(), lblSketchStatus);
+            UpdateApplyButtonStage();
 
             this.Show();
         }
@@ -135,7 +154,7 @@ namespace CreateCuttingPunch.View
 
         private void chkRetriveProjInfo_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkRetriveProjInfo.Checked) 
+            if (chkRetriveProjInfo.Checked)
             {
                 UpdateProjectInfo();
             }
@@ -159,7 +178,7 @@ namespace CreateCuttingPunch.View
             TextPart = projInfo.Part;
             TextModel = projInfo.Model;
             TextCodePrefix = projInfo.CodePrefix;
-            TextDesigner = projInfo.Designer;            
+            TextDesigner = projInfo.Designer;
         }
 
         private void btnSaveProjInfo_Click(object sender, EventArgs e)
@@ -190,7 +209,7 @@ namespace CreateCuttingPunch.View
 
         private bool IsProjectInfoFilled()
         {
-            return 
+            return
                 !string.IsNullOrEmpty(TextModel) &&
                 !string.IsNullOrEmpty(TextCodePrefix) &&
                 !string.IsNullOrEmpty(TextDesigner) &&
@@ -199,8 +218,172 @@ namespace CreateCuttingPunch.View
 
         private void btnPathRetrieve_Click(object sender, EventArgs e)
         {
-            Part workPart = Session.GetSession().Parts.Work;
-            TextPath = FileManageService.GetCurrentDirectory(workPart);            
+            try
+            {
+                Part workPart = Session.GetSession().Parts.Work;
+                TextPath = FileManageService.GetCurrentDirectory(workPart);
+
+                // Populate ListView with assembly files
+                PopulateAssemblyListView();
+            }
+            catch (Exception ex)
+            {
+                string message = $"Error retrieving path or loading assembly files: {ex.Message}";
+                string title = "Error";
+                NXDrawing.ShowMessageBox(message, title, NXMessageBox.DialogType.Error);
+            }
+        }
+
+        private void PopulateAssemblyListView()
+        {
+            try
+            {
+                // Clear existing items
+                listView1.Items.Clear();
+
+                // Check if path is valid
+                if (string.IsNullOrEmpty(TextPath) || !Directory.Exists(TextPath))
+                {
+                    return;
+                }
+
+                // Get assembly files using your service
+                var assemblyFiles = FileManageService.GetAssemblyFiles(TextPath);
+
+                // Configure ListView if not already configured
+                ConfigureListView();
+
+                // Add files to ListView
+                foreach (var filePath in assemblyFiles)
+                {
+                    var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                    var listItem = new ListViewItem(fileName);
+                    listItem.Tag = filePath; // Store full path in Tag for later use
+                    listView1.Items.Add(listItem);
+                }
+
+                // Update status
+                UpdateAssemblyListStatus(assemblyFiles.Count);
+            }
+            catch (Exception ex)
+            {
+                string message = $"Error loading assembly files: {ex.Message}";
+                string title = "Error Loading Files";
+                NXDrawing.ShowMessageBox(message, title, NXMessageBox.DialogType.Error);
+            }
+        }
+
+        private void ConfigureListView()
+        {
+            // Configure ListView for better appearance
+            if (listView1.View != System.Windows.Forms.View.Details)
+            {
+                listView1.View = System.Windows.Forms.View.Details;
+                listView1.FullRowSelect = true;
+                listView1.GridLines = true;
+                listView1.Sorting = SortOrder.Ascending;
+
+                // Add columns if they don't exist
+                if (listView1.Columns.Count == 0)
+                {
+                    listView1.Columns.Add("Assembly File Name", 300);
+                }
+            }
+        }
+
+        private void UpdateAssemblyListStatus(int fileCount)
+        {
+            // Update the group box text to show count
+            groupBox5.Text = $"Assembly Lists: ({fileCount} files), pick one for the punch";
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                var selectedItem = listView1.SelectedItems[0];
+                var fileName = selectedItem.Text;
+                var fullPath = selectedItem.Tag?.ToString();
+
+                string message = $"Selected Assembly: {fileName}\nFull Path: {fullPath}";
+                NXDrawing.ShowMessageBox(message, "Assembly File Selected", NXMessageBox.DialogType.Information);
+            }
+        }
+
+        private void chkRetriveProjInfoFromDwg_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRetriveProjInfoFromDwg.Checked)
+            {
+                var projInfo = AttributeManagerService.RetrieveProjectInfoFrmDrawing();
+                TextModel = projInfo.Model;
+                TextPart = projInfo.Part;
+                TextDesigner = projInfo.Designer;
+                TextCodePrefix = projInfo.CodePrefix;
+            }
+            else
+            {
+                ClearProjectInfo();
+            }
+        }
+
+        private void UpdateApplyButtonStage()
+        {            
+            var validationData = new FormValidationData
+            {
+                Path = TextPath,
+                PunchLength = TextPunLength,
+                Model = TextModel,
+                Part = TextPart,
+                CodePrefix = TextCodePrefix,
+                Designer = TextDesigner,
+                AsmDrawingPath = TextAsmDrawingPath,
+                IsProfileSelected = selectionModel.IsSelected()
+            };
+
+            var validationResult = _validator.ValidateForApply(validationData);
+            BtnApply.Enabled = validationResult.IsValid;
+
+            if (showDebugMessage && !validationResult.IsValid)
+            {
+                string message = string.Join(Environment.NewLine, validationResult.Errors);
+                string title = "Validation Errors";
+                NXDrawing.ShowMessageBox(message, title, NXMessageBox.DialogType.Error);
+            }
+        }
+
+        private void txtPath_TextChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
+        }
+
+        private void txtModel_TextChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
+        }
+
+        private void txtPart_TextChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
+        }
+
+        private void txtCodePrefix_TextChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
+        }
+
+        private void cboDesign_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
+        }
+
+        private void txtPunchLength_TextChanged(object sender, EventArgs e)
+        {
+            UpdateApplyButtonStage();
         }
     }
 }

@@ -68,21 +68,7 @@ namespace CreateCuttingPunch.Services
             var result = ProcessTaggedObjectToSelectionModel(outObject);
 
             return result;
-        }
-
-        private void CreatePoint(Point3d cursor)
-        {
-            Part workPart = NXOpen.Session.GetSession().Parts.Work;            
-            
-            Point p1 = workPart.Points.CreatePoint(cursor);
-            p1.SetVisibility(SmartObject.VisibilityOption.Visible);
-
-            if (p1 is not null)
-                NXDrawing.ShowMessageBox(
-                    $"Point created at X:{cursor.X}, Y:{cursor.Y}, Z:{cursor.Z}", 
-                    "Point Created", 
-                    NXMessageBox.DialogType.Information);
-        }
+        }        
 
         private SelectionModel ProcessTaggedObjectToSelectionModel(TaggedObject obj)
         {
