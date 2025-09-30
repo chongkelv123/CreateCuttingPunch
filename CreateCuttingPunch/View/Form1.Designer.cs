@@ -56,6 +56,8 @@
             this.radShoulder = new System.Windows.Forms.RadioButton();
             this.radStraight = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtOffSetDownPHT = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtTipLength = new System.Windows.Forms.TextBox();
@@ -68,8 +70,6 @@
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.radOffsetDownPHT = new System.Windows.Forms.RadioButton();
             this.radPunHldTop = new System.Windows.Forms.RadioButton();
-            this.txtOffSetDownPHT = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox9.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -397,6 +397,22 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Numerical Dimension";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(92, 88);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 16);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Offset PHT (O:)";
+            // 
+            // txtOffSetDownPHT
+            // 
+            this.txtOffSetDownPHT.Location = new System.Drawing.Point(6, 85);
+            this.txtOffSetDownPHT.Name = "txtOffSetDownPHT";
+            this.txtOffSetDownPHT.Size = new System.Drawing.Size(80, 22);
+            this.txtOffSetDownPHT.TabIndex = 4;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -483,6 +499,7 @@
             this.btnSelectDatum.TabIndex = 0;
             this.btnSelectDatum.Text = "Selection...";
             this.btnSelectDatum.UseVisualStyleBackColor = true;
+            this.btnSelectDatum.Click += new System.EventHandler(this.btnSelectDatum_Click);
             // 
             // groupBox8
             // 
@@ -516,22 +533,6 @@
             this.radPunHldTop.TabStop = true;
             this.radPunHldTop.Text = "Punch Holder Top";
             this.radPunHldTop.UseVisualStyleBackColor = true;
-            // 
-            // txtOffSetDownPHT
-            // 
-            this.txtOffSetDownPHT.Location = new System.Drawing.Point(6, 85);
-            this.txtOffSetDownPHT.Name = "txtOffSetDownPHT";
-            this.txtOffSetDownPHT.Size = new System.Drawing.Size(80, 22);
-            this.txtOffSetDownPHT.TabIndex = 4;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(92, 88);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 16);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Offset PHT (O:)";
             // 
             // UserForm
             // 

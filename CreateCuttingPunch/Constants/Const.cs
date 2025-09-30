@@ -116,5 +116,15 @@ namespace CreateCuttingPunch.Constants
             public const string RIGHT_ASSEMBLY = "RIGHT ASSEMBLY";
             public const string ASSEMBLY_FOR = "ASSEMBLY FOR ";
         }
+
+        public static class NxTemplate
+        {
+            public const string UG_APP_MODELING = "UG_APP_MODELING";
+            public const string MODEL = "MODEL";
+            public const string EXTENSION = ".prt";
+            public const string MODEL_TEMPLATE = "ModelTemplate";
+            public const string TEMPLATE_3DASTP_NAME = "3DA_Template_STP-V00.prt";
+            public const string TMP_PRESENTATION_NAME_MODEL = "Model";
+        }
     }
 }

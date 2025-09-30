@@ -83,6 +83,17 @@ namespace CreateCuttingPunch.View
             set => txtTipLength.Text = value;
         }
 
+        public ProjectInfoModel GetProjectInfo()
+        {
+            return new ProjectInfoModel()
+            {
+                Model = TextModel,
+                Part = TextPart,
+                CodePrefix = TextCodePrefix,
+                Designer = TextDesigner
+            };                                
+        }
+
         public UserForm(Controller.Control control)
         {
             InitializeComponent();
@@ -103,8 +114,7 @@ namespace CreateCuttingPunch.View
         }
 
         private void BtnApply_Click(object sender, EventArgs e)
-        {    
-            //System.Diagnostics.Debugger.Launch();
+        {                
             control.Start(selectionModel);
             this.Close();
         }
@@ -384,6 +394,17 @@ namespace CreateCuttingPunch.View
         private void txtPunchLength_TextChanged(object sender, EventArgs e)
         {
             UpdateApplyButtonStage();
+        }
+
+        private void btnSelectDatum_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+
+            //System.Diagnostics.Debugger.Launch();
+            var selectionDatumModel = _selectionService.DatumSelection();
+            DatumPlane datumPlane = selectionDatumModel.DatumObject as DatumPlane;            
+
+            this.Show();
         }
     }
 }

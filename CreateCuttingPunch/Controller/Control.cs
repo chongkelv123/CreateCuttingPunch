@@ -29,24 +29,14 @@ namespace CreateCuttingPunch.Controller
 
         public void Start(SelectionModel selectionModel)
         {
-            //System.Diagnostics.Debugger.Launch();
-            var sheetBody = selectionModel.SheetBodyObject;
-            Body body = sheetBody[0] as Body;
-            var edges = body.GetEdges();
+            Punch newPunch = new Punch();
+            newPunch.FileName = "Test New Punch";
+            newPunch.FolderPath = "C:\\CreateFolder\\TestNewPunches\\";
+            newPunch.ProjectInfo = myForm.GetProjectInfo();
+            newPunch.DrawingCode = "123456-2401-0111";
+            newPunch.ItemName = "New Punch";
 
-            // Sketch builder
-            Part workPart = Session.GetSession().Parts.Work;
-            Sketch nullSketch = null;
-            SketchInPlaceBuilder skBuilder = workPart.Sketches.CreateSketchInPlaceBuilder2(nullSketch);
-
-            NXOpen.Point3d origin1 = new NXOpen.Point3d(0.0, 0.0, 76.0);
-            NXOpen.Vector3d normal1 = new NXOpen.Vector3d(0.0, 0.0, 1.0);
-            NXOpen.Plane plane1;
-            plane1 = workPart.Planes.CreatePlane(origin1, normal1, NXOpen.SmartObject.UpdateOption.WithinModeling);
-
-            skBuilder.PlaneReference = plane1;
-
-
+            newPunch.Create();
         }
     }
 }

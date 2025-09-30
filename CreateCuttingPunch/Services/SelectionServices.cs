@@ -30,22 +30,21 @@ namespace CreateCuttingPunch.Services
                 UFConstants.UF_all_subtype,
                 0); // Not a solid body
 
-        public SelectionModel Selections()
+        private Selection.MaskTriple GetDatumMask => new Selection.MaskTriple(
+            UFConstants.UF_datum_plane_type,
+            UFConstants.UF_all_subtype,
+            0);
+
+        public SelectionDatumModel DatumSelection()
         {
             UI ui = UI.GetUI();
             var selectionManager = ui.SelectionManager;
             Selection.SelectionScope scope = Selection.SelectionScope.AnyInAssembly;
-            string message = "Select a sketch or face for the punch creation";
-            string title = "Select Sketch or Face";
-
-            // Mask for selecting any face
-            Selection.MaskTriple faceMask = GetSheetBodyMask;
-
-            // Mask for selecting any sketch
-            Selection.MaskTriple sketchMask = GetSketchMask;
+            string message = "Select a datum for the punch creation";
+            string title = "Select Datum";
 
             // Create an array to hold the masks
-            Selection.MaskTriple[] maskArray = new Selection.MaskTriple[] { faceMask, sketchMask };
+            Selection.MaskTriple[] maskArray = new Selection.MaskTriple[] { GetDatumMask };
 
             Selection.SelectionAction action = Selection.SelectionAction.ClearAndEnableSpecific;
             bool includeFeatures = false;
@@ -63,12 +62,62 @@ namespace CreateCuttingPunch.Services
                 keepHighlighted,
                 maskArray,
                 out outObject,
-                out cursor);           
+                out cursor);
+
+            var result = ProcessTaggedObjectToSelectionDatumModel(outObject);
+
+            return result;
+        }
+
+        public SelectionModel Selections()
+        {
+            UI ui = UI.GetUI();
+            var selectionManager = ui.SelectionManager;
+            Selection.SelectionScope scope = Selection.SelectionScope.AnyInAssembly;
+            string message = "Select a sketch or face for the punch creation";
+            string title = "Select Sketch or Face";
+
+            // Create an array to hold the masks
+            Selection.MaskTriple[] maskArray = new Selection.MaskTriple[] { GetSheetBodyMask, GetSketchMask };
+
+            Selection.SelectionAction action = Selection.SelectionAction.ClearAndEnableSpecific;
+            bool includeFeatures = false;
+            bool keepHighlighted = false;
+
+            TaggedObject outObject;
+            Point3d cursor;
+
+            Response response = selectionManager.SelectTaggedObject(
+                message,
+                title,
+                scope,
+                action,
+                includeFeatures,
+                keepHighlighted,
+                maskArray,
+                out outObject,
+                out cursor);
 
             var result = ProcessTaggedObjectToSelectionModel(outObject);
 
             return result;
-        }        
+        }
+        
+        private SelectionDatumModel ProcessTaggedObjectToSelectionDatumModel(TaggedObject obj)
+        {
+            if (obj is null)
+                return new SelectionDatumModel();
+
+            SelectionDatumModel selModel = new SelectionDatumModel();
+
+            if (obj is DatumPlane datumPlane)
+            {
+                selModel.DatumObject = datumPlane;
+            }
+
+            return selModel;
+        }
+
 
         private SelectionModel ProcessTaggedObjectToSelectionModel(TaggedObject obj)
         {
