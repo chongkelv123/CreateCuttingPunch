@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static CreateCuttingPunch.Constants.Const;
 using CreateCuttingPunch.Services;
+using NXOpen;
+using NXOpen.CAE;
 
 
 namespace CreateCuttingPunch.Model
@@ -17,20 +19,37 @@ namespace CreateCuttingPunch.Model
         public ProjectInfoModel ProjectInfo { get; set; }
         public string DrawingCode { get; set; }
         public string ItemName { get; set; }
+        //public Tag[] tagCurves { get; set; }
+        //public Tag[] tagPlanes { get; set; }
+        public TaggedObject SheetObject { get; set; }
 
-        public void Create()
+        ComponentCreationConfig getConfig => ComponentCreationConfigs.CreatePunchConfig(
+            FolderPath,
+            FileName,
+            ProjectInfo,
+            DrawingCode,
+            ItemName,
+            SheetObject
+        );
+
+        public Part Create()
         {
-            // Create configuration for this plate            
-            var config = ComponentCreationConfigs.CreatePunchConfig(                
-                FolderPath,
-                FileName,                                                
-                ProjectInfo,
-                DrawingCode,
-                ItemName);
+            // Create configuration for this punch            
+            var config = getConfig;
 
             // Use the unified service to create the component
             var creationService = new ComponentCreationService();
-            creationService.CreateNewComponent(config);
+            var workPart = creationService.CreateNewComponent(config);
+
+            return workPart;
+        }
+
+        public void GenerateProfile()
+        {
+            var config = getConfig;
+
+            var creationService = new ComponentCreationService();
+            creationService.ProjectProfile(config);
         }
 
     }

@@ -11,9 +11,15 @@ using static CreateCuttingPunch.Constants.Const;
 namespace CreateCuttingPunch.Services
 {
     public class ComponentInsertService
-    {        
+    {
+
         public static void Insert(Part workAssy, string compName, Point3d basePoint, string folderPath)
         {
+            bool debugMode = false;
+            if (debugMode)
+                System.Diagnostics.Debugger.Launch();
+
+
             ComponentAssembly compAssy = workAssy.ComponentAssembly;
             PartLoadStatus status = null;
             int layer = 100;
@@ -30,15 +36,17 @@ namespace CreateCuttingPunch.Services
             orientation.Zz = 1.0;
 
             string partToAdd = $"{folderPath}{compName}{NxTemplate.EXTENSION}";
-            
+
+            if(debugMode)
+                System.Diagnostics.Debug.WriteLine($"Debug: {partToAdd}");
 
             NXOpen.Assemblies.Component component = compAssy.AddComponent(
-                partToAdd, 
-                referenceSetName, 
-                compName, 
-                basePoint, 
-                orientation, 
-                layer, 
+                partToAdd,
+                referenceSetName,
+                compName,
+                basePoint,
+                orientation,
+                layer,
                 out status);
 
             NXOpen.Positioning.ComponentPositioner positioner = workAssy.ComponentAssembly.Positioner;

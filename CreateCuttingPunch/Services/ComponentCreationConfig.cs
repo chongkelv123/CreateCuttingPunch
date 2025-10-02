@@ -26,5 +26,8 @@ namespace CreateCuttingPunch.Services
         public string Width { get; set; } = HRC.HYPHEN;
         public string Length { get; set; } = HRC.HYPHEN;
         public string Thickness { get; set; } = HRC.HYPHEN;
+        //public Tag[] tagCurves { get; set; }
+        //public Tag[] tagPlanes { get; set; }
+        public TaggedObject SheetObject { get; set; }
     }
 }

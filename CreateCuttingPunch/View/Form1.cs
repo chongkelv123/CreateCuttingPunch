@@ -27,12 +27,14 @@ namespace CreateCuttingPunch.View
         private readonly SelectionServices _selectionService;
         private readonly FormValidator _validator;
         private SelectionModel selectionModel;
+        private TaggedObject sheetObject;
+
 
         bool showDebugMessage = false;
 
         public string TextPath
         {
-            get => txtPath.Text.Trim();
+            get => txtPath.Text.Trim() + "\\";
             set => txtPath.Text = value;
         }
         public string TextModel
@@ -83,6 +85,21 @@ namespace CreateCuttingPunch.View
             set => txtTipLength.Text = value;
         }
 
+        public string GetSubAsmName
+        {            
+            get => listView1.SelectedItems[0].Text;
+        }
+
+        public string GetSubAsmPath
+        {
+            get => listView1.SelectedItems[0].Tag?.ToString();
+        }        
+
+        public TaggedObject GetSheetObject
+        {
+            get => sheetObject;
+        }
+
         public ProjectInfoModel GetProjectInfo()
         {
             return new ProjectInfoModel()
@@ -91,7 +108,7 @@ namespace CreateCuttingPunch.View
                 Part = TextPart,
                 CodePrefix = TextCodePrefix,
                 Designer = TextDesigner
-            };                                
+            };
         }
 
         public UserForm(Controller.Control control)
@@ -114,7 +131,7 @@ namespace CreateCuttingPunch.View
         }
 
         private void BtnApply_Click(object sender, EventArgs e)
-        {                
+        {
             control.Start(selectionModel);
             this.Close();
         }
@@ -125,6 +142,7 @@ namespace CreateCuttingPunch.View
 
             selectionModel = _selectionService.Selections();
             UpdateSelectLableStatus(selectionModel.IsSelected(), lblSketchStatus);
+            sheetObject = selectionModel.SheetBodyObject[0];
             UpdateApplyButtonStage();
 
             this.Show();
@@ -337,7 +355,7 @@ namespace CreateCuttingPunch.View
         }
 
         private void UpdateApplyButtonStage()
-        {            
+        {
             var validationData = new FormValidationData
             {
                 Path = TextPath,
@@ -402,7 +420,7 @@ namespace CreateCuttingPunch.View
 
             //System.Diagnostics.Debugger.Launch();
             var selectionDatumModel = _selectionService.DatumSelection();
-            DatumPlane datumPlane = selectionDatumModel.DatumObject as DatumPlane;            
+            DatumPlane datumPlane = selectionDatumModel.DatumObject as DatumPlane;
 
             this.Show();
         }

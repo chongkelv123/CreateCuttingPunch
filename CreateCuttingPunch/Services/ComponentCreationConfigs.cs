@@ -18,7 +18,11 @@ namespace CreateCuttingPunch.Services
             string fileName,            
             ProjectInfoModel projectInfo,
             string drawingCode, 
-            string itemName)
+            string itemName,
+            //Tag[] tagCurves,
+            //Tag[] tagPlanes
+            TaggedObject SheetObject
+            )
         {
             return new ComponentCreationConfig
             {
@@ -33,7 +37,8 @@ namespace CreateCuttingPunch.Services
                 ColorAssignmentAction = AssignPlateColors,
                 PartPropertiesType = PartType.INSERT,
                 Material = Const.Material.GOA,
-                Hardness = HRC.FIFTYTWO_FIFTYFOUR
+                Hardness = HRC.FIFTYTWO_FIFTYFOUR,
+                SheetObject = SheetObject                
             };
         }
 

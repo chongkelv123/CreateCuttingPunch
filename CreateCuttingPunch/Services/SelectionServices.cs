@@ -131,12 +131,25 @@ namespace CreateCuttingPunch.Services
                 if (body.IsSheetBody)
                 {
                     selModel.SheetBodyObject.Add(body);
+                    //List<Tag> tags = new List<Tag>();
+                    //foreach (var edge in body.GetEdges())
+                    //{
+                    //    tags.Add(edge.Tag);
+                    //}
+                    //selModel.TagCurves = tags;
                 }
             }
 
             if (obj is Sketch sketch)
             {
                 selModel.SketchObject.Add(sketch);
+                //List<Tag> tags = new List<Tag>();
+                //foreach (var geometry in sketch.GetAllGeometry())
+                //{
+                //    if(geometry is Curve curve)
+                //        tags.Add(curve.Tag);
+                //}
+                //selModel.TagCurves = tags;
             }
 
             return selModel;
