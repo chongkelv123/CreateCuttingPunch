@@ -36,11 +36,8 @@ namespace CreateCuttingPunch.Controller
             //System.Diagnostics.Debugger.Launch();
             Session session = Session.GetSession();
             Part workAssy = session.Parts.Work;
-            string mainAsmDisplayName = workAssy.Name;
-            NXDrawing.ShowMessageBox(
-                $"main asm name: {mainAsmDisplayName}",
-                "Testing",
-                NXMessageBox.DialogType.Information);
+            Part displayPart = session.Parts.Display;
+            string mainAsmDisplayName = workAssy.Name;            
 
             string punchFileName = "TestNewPunch";
             Punch newPunch = new Punch();
@@ -57,31 +54,35 @@ namespace CreateCuttingPunch.Controller
 
             try
             {
-                System.Diagnostics.Debugger.Launch();
+                //System.Diagnostics.Debugger.Launch();
 
-                Part targetSubAsmComponent = SetActive(myForm.GetSubAsmName);
+                Part targetSubAsmComponent = SetActivePart(myForm.GetSubAsmName);
 
                 Point3d position = new Point3d(100, 0, 137.55);
                 string insertFullPath = Path.Combine(myForm.TextPath, punchFileName);
                 ComponentInsertService.Insert(targetSubAsmComponent, punchFileName, position, myForm.TextPath);
-
-
-                //Part punchComponent = OpenInWindow(punchFileName);
+                
                 // Project Curve here
-                SetActive(mainAsmDisplayName);
+                SetActivePart(mainAsmDisplayName);
                 var punchComponent = GetComponentByName(punchFileName, workAssy);
                 session.Parts.SetWorkComponent(punchComponent, out _);
                 newPunch.GenerateProfile();
+                
+                SaveAndClosePart(targetSubAsmComponent);
 
-                //ClosePartFile(punchPart);
-                //ClosePartFile(targetSubAsmComponent);
-
-                SetActive(mainAsmDisplayName);
+                SetWorkPart(mainAsmDisplayName);                
             }
             catch (Exception ex)
             {
                 throw new Exception($"error open / insert component: {ex.Message}");
             }
+        }
+
+        private void SetWorkPart(string mainAsmDisplayName)
+        {
+            Session session = Session.GetSession();
+            Part targetComponent = session.Parts.FindObject(mainAsmDisplayName) as Part;
+            session.Parts.SetWork(targetComponent);
         }
 
         private Component GetComponentByName(string componentName, Part workAssy)
@@ -107,14 +108,14 @@ namespace CreateCuttingPunch.Controller
             return null;
         }
 
-        private void ClosePartFile(Part workPart)
+        private void SaveAndClosePart(Part workPart)
         {
             if (workPart == null)
                 return;
 
             try
-            {
-                workPart.Close(BasePart.CloseWholeTree.True, BasePart.CloseModified.UseResponses, null);
+            {                
+                workPart.Save(BasePart.SaveComponents.True, BasePart.CloseAfterSave.True);                              
             }
             catch (Exception ex)
             {
@@ -123,7 +124,7 @@ namespace CreateCuttingPunch.Controller
             }
         }
 
-        private Part SetActive(string fileNameWithOutExtension)
+        private Part SetActivePart(string fileNameWithOutExtension)
         {
             Session session = Session.GetSession();
             Part targetComponent = session.Parts.FindObject(fileNameWithOutExtension) as Part;

@@ -69,8 +69,7 @@ namespace CreateCuttingPunch.Services
             //   Menu: Insert->Derived Curve->Project...
             // ----------------------------------------------
             Session theSession = Session.GetSession();
-            Part workPart = theSession.Parts.Work;
-            Part displayPart = theSession.Parts.Display;
+            Part workPart = theSession.Parts.Work;            
 
             NXOpen.Features.Feature nullNXOpen_Features_Feature = null;
             NXOpen.Features.ProjectCurveBuilder projectCurveBuilder1;
@@ -236,121 +235,7 @@ namespace CreateCuttingPunch.Services
             plane1.DestroyPlane();
 
             waveLinkRepository1.Destroy();
-        }
-
-        public void ProjectPunchProfile(ComponentCreationConfig config)
-        {
-            if (debugMode)
-                System.Diagnostics.Debugger.Launch();
-
-            //Part workPart = Session.GetSession().Parts.Work;
-            var ufs = UFSession.GetUFSession();
-            
-
-            //Tag[] tagPlanes = AskXYDatumPlane();
-            //config.tagPlanes = tagPlanes;            
-
-            //int along_face_normal = 3;
-            //Tag proj_curve_feature;
-            //double[] proj_vector = { 0.0, 0.0, 1.0 };
-
-            //try
-            //{                               
-            //    ufs.Modl.CreateProjCurves(
-            //        config.tagCurves,
-            //        config.tagPlanes,
-            //        along_face_normal,
-            //        proj_vector,
-            //        out proj_curve_feature);
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception($"Project Curve Error: {ex.Message}");
-            //}
-            Part workPart = Session.GetSession().Parts.Work;
-            ProjectCurveBuilder projectCurveBuilder1 = workPart.Features.CreateProjectCurveBuilder(null);
-            projectCurveBuilder1.CurveFitData.Tolerance = 0.001;
-            projectCurveBuilder1.CurveFitData.AngleTolerance = 0.01;
-            projectCurveBuilder1.ProjectionDirectionMethod = ProjectCurveBuilder.DirectionType.AlongVector;            
-            projectCurveBuilder1.AngleToProjectionVector.SetFormula("0");
-            Direction direction1 = workPart.Directions.CreateDirection(
-                new Point3d(0, 0, 0),
-                new Vector3d(0,0,1),
-                SmartObject.UpdateOption.WithinModeling
-                );
-
-            projectCurveBuilder1.ProjectionVector = direction1;
-
-            NXOpen.GeometricUtilities.WaveLinkRepository waveLinkRepository1 = workPart.CreateWavelinkRepository();
-            waveLinkRepository1.SetNonFeatureApplication(false);
-            waveLinkRepository1.SetBuilder(projectCurveBuilder1);
-
-            CompositeCurveBuilder compositeCurveBuilder1 = workPart.Features.CreateCompositeCurveBuilder(null);
-
-            Feature feature1 = compositeCurveBuilder1.CommitCreateOnTheFly();
-
-            CompositeCurve compositeCurve1 = (CompositeCurve)feature1;
-            waveLinkRepository1.SetLink(compositeCurve1);
-            CompositeCurveBuilder compositeCurveBuilder2 = workPart.Features.CreateCompositeCurveBuilder(compositeCurve1);
-
-            Feature feature2 = compositeCurveBuilder2.CommitCreateOnTheFly();
-
-            Feature[] features1 = new Feature[1];
-            CompositeCurve compositeCurve2 = (CompositeCurve)feature2;
-            features1[0] = compositeCurve2;
-
-            SelectionIntentRuleOptions selectionIntentRuleOptions3 = workPart.ScRuleFactory.CreateRuleOptions();
-            selectionIntentRuleOptions3.SetSelectedFromInactive(false);
-
-            CurveFeatureRule curveFeatureRule = workPart.ScRuleFactory.CreateRuleCurveFeature(
-                features1,
-                null,
-                selectionIntentRuleOptions3
-                );
-
-            selectionIntentRuleOptions3.Dispose();
-
-            SelectionIntentRule[] rules3 = new SelectionIntentRule[1];
-            rules3[0] = curveFeatureRule;
-
-            var nxObjs = compositeCurve2.GetEntities();
-            NXObject seed = null;
-            Point3d helpPoint2 = new Point3d(0,0,0);
-            foreach (var obj in nxObjs)
-            {
-                if (obj is Line line)
-                { 
-                    seed = obj;
-                    Line line1 = (Line)line;
-                    helpPoint2 = line1.StartPoint;
-                    break;
-                }
-                else if (obj is Arc arc)
-                {
-                    {
-                        seed = obj;
-                        Arc arc1 = (Arc)arc;
-                        helpPoint2 = arc1.CenterPoint;
-                        break;
-                    }
-                }
-            }            
-
-            projectCurveBuilder1.SectionToProject.AddToSection(
-                rules3,
-                seed,
-                null,
-                null,
-                helpPoint2,
-                Section.Mode.Create,
-                false
-                );
-
-            NXObject projectCurve;
-            projectCurve = projectCurveBuilder1.Commit();
-
-            projectCurveBuilder1.Destroy();
-        }
+        }        
 
         private DatumPlane AskXYDatumPlane()
         {

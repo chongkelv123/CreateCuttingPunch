@@ -5,9 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static CreateCuttingPunch.Constants.Const;
-using CreateCuttingPunch.Services;
 using NXOpen;
-using NXOpen.CAE;
 
 
 namespace CreateCuttingPunch.Model
@@ -18,9 +16,7 @@ namespace CreateCuttingPunch.Model
         public string FolderPath { get; set; }
         public ProjectInfoModel ProjectInfo { get; set; }
         public string DrawingCode { get; set; }
-        public string ItemName { get; set; }
-        //public Tag[] tagCurves { get; set; }
-        //public Tag[] tagPlanes { get; set; }
+        public string ItemName { get; set; }        
         public TaggedObject SheetObject { get; set; }
 
         ComponentCreationConfig getConfig => ComponentCreationConfigs.CreatePunchConfig(
