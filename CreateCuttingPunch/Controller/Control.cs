@@ -39,7 +39,7 @@ namespace CreateCuttingPunch.Controller
             Part displayPart = session.Parts.Display;
             string mainAsmDisplayName = workAssy.Name;            
 
-            string punchFileName = "TestNewPunch";
+            string punchFileName = "TestNewPunch1";
             Punch newPunch = new Punch();
             newPunch.FileName = punchFileName;
             newPunch.FolderPath = myForm.TextPath + "\\";
@@ -47,6 +47,7 @@ namespace CreateCuttingPunch.Controller
             newPunch.DrawingCode = "123456-2401-0111";
             newPunch.ItemName = "Cutting Punch";
             newPunch.SheetObject = myForm.GetSheetObject;
+            newPunch.Length = myForm.GetPunchLength;
 
             var punchPart = newPunch.Create();
 
@@ -68,7 +69,7 @@ namespace CreateCuttingPunch.Controller
                 session.Parts.SetWorkComponent(punchComponent, out _);
                 newPunch.GenerateProfile();
                 
-                SaveAndClosePart(targetSubAsmComponent);
+                SavePart(targetSubAsmComponent);
 
                 SetWorkPart(mainAsmDisplayName);                
             }
@@ -108,14 +109,14 @@ namespace CreateCuttingPunch.Controller
             return null;
         }
 
-        private void SaveAndClosePart(Part workPart)
+        private void SavePart(Part workPart)
         {
             if (workPart == null)
                 return;
 
             try
             {                
-                workPart.Save(BasePart.SaveComponents.True, BasePart.CloseAfterSave.True);                              
+                workPart.Save(BasePart.SaveComponents.True, BasePart.CloseAfterSave.False);                              
             }
             catch (Exception ex)
             {

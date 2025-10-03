@@ -19,10 +19,9 @@ namespace CreateCuttingPunch.Services
             if (debugMode)
                 System.Diagnostics.Debugger.Launch();
 
-
             ComponentAssembly compAssy = workAssy.ComponentAssembly;
             PartLoadStatus status = null;
-            int layer = 100;
+            int layer = 110;
             string referenceSetName = NxTemplate.MODEL;
             Matrix3x3 orientation = new Matrix3x3();
             orientation.Xx = 1.0;

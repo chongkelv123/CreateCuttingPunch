@@ -19,8 +19,7 @@ namespace CreateCuttingPunch.Services
             ProjectInfoModel projectInfo,
             string drawingCode, 
             string itemName,
-            //Tag[] tagCurves,
-            //Tag[] tagPlanes
+            string length,
             TaggedObject SheetObject
             )
         {
@@ -30,7 +29,7 @@ namespace CreateCuttingPunch.Services
                 PresentationName = NxTemplate.TMP_PRESENTATION_NAME_MODEL,
                 UndoDescription = "Create New Punch",
                 FolderPath = folderPath,
-                FileName = fileName,                
+                FileName = fileName,
                 ProjectInfo = projectInfo,
                 DrawingCode = drawingCode,
                 ItemName = itemName,
@@ -38,7 +37,8 @@ namespace CreateCuttingPunch.Services
                 PartPropertiesType = PartType.INSERT,
                 Material = Const.Material.GOA,
                 Hardness = HRC.FIFTYTWO_FIFTYFOUR,
-                SheetObject = SheetObject                
+                Length = length,
+                SheetObject = SheetObject
             };
         }
 

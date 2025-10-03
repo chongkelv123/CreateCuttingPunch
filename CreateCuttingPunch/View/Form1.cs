@@ -29,9 +29,9 @@ namespace CreateCuttingPunch.View
         private SelectionModel selectionModel;
         private TaggedObject sheetObject;
 
-
         bool showDebugMessage = false;
 
+        public string GetPunchLength => txtPunchLength.Text.Trim();
         public string TextPath
         {
             get => txtPath.Text.Trim() + "\\";

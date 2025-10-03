@@ -74,11 +74,11 @@ namespace CreateCuttingPunch.Services
             UI ui = UI.GetUI();
             var selectionManager = ui.SelectionManager;
             Selection.SelectionScope scope = Selection.SelectionScope.AnyInAssembly;
-            string message = "Select a sketch or face for the punch creation";
-            string title = "Select Sketch or Face";
+            string message = "Select a Sheet Body for the punch creation";
+            string title = "Select Sheet Body";
 
             // Create an array to hold the masks
-            Selection.MaskTriple[] maskArray = new Selection.MaskTriple[] { GetSheetBodyMask, GetSketchMask };
+            Selection.MaskTriple[] maskArray = new Selection.MaskTriple[] { GetSheetBodyMask };
 
             Selection.SelectionAction action = Selection.SelectionAction.ClearAndEnableSpecific;
             bool includeFeatures = false;
