@@ -68,6 +68,7 @@ namespace CreateCuttingPunch.Controller
                 var punchComponent = GetComponentByName(punchFileName, workAssy);
                 session.Parts.SetWorkComponent(punchComponent, out _);
                 newPunch.GenerateProfile();
+                newPunch.Extrude();
                 
                 SavePart(targetSubAsmComponent);
 

@@ -50,5 +50,13 @@ namespace CreateCuttingPunch.Model
             creationService.MakeSketchProjectCurve(config);
         }
 
+        public void Extrude(string sketchName = "MAIN")
+        {
+            var config = getConfig;
+
+            var creationService = new ComponentCreationService();
+            creationService.ExtrudeSketchByName(sketchName, config.Length);
+        }
+
     }
 }

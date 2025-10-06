@@ -44,8 +44,8 @@ namespace CreateCuttingPunch.Services
                 // Phase 4: Part Properties Update (common pattern)
                 UpdatePartProperties(config);
 
-                // Test Datum dump infomation
-                //AskDatumPoint();
+                // Test Features dump infomation
+                //AskSketchFeatureByName("MAIN");
 
                 // Phase 7: Save Operations (common)
                 SaveNCloseComponent(workPart);
@@ -65,16 +65,14 @@ namespace CreateCuttingPunch.Services
             }
         }
 
-        public void ExtrudeSketchByName(string sketchName)
-        {
+        public void ExtrudeSketchByName(string sketchName, string punchLength)
+        {            
             NXOpen.Session theSession = NXOpen.Session.GetSession();
             NXOpen.Part workPart = theSession.Parts.Work;
             NXOpen.Part displayPart = theSession.Parts.Display;
             // ----------------------------------------------
             //   Menu: Insert->Design Feature->Extrude...
-            // ----------------------------------------------
-            NXOpen.Session.UndoMarkId markId1;
-            markId1 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Visible, "Start");
+            // ----------------------------------------------            
 
             NXOpen.Features.Feature nullNXOpen_Features_Feature = null;
             NXOpen.Features.ExtrudeBuilder extrudeBuilder1;
@@ -104,7 +102,7 @@ namespace CreateCuttingPunch.Services
 
             extrudeBuilder1.Limits.StartExtend.Value.SetFormula("0");
 
-            extrudeBuilder1.Limits.EndExtend.Value.SetFormula("80");
+            extrudeBuilder1.Limits.EndExtend.Value.SetFormula(punchLength);
 
             extrudeBuilder1.Draft.FrontDraftAngle.SetFormula("45");
 
@@ -120,8 +118,6 @@ namespace CreateCuttingPunch.Services
             smartVolumeProfileBuilder1.OpenProfileSmartVolumeOption = false;
 
             smartVolumeProfileBuilder1.CloseProfileRule = NXOpen.GeometricUtilities.SmartVolumeProfileBuilder.CloseProfileRuleType.Fci;
-
-            theSession.SetUndoMarkName(markId1, "Extrude Dialog");
 
             NXOpen.Point3d origin1 = new NXOpen.Point3d(0.0, 0.0, 0.0);
             NXOpen.Vector3d vector1 = new NXOpen.Vector3d(-0.0, -0.0, -1.0);
@@ -154,36 +150,31 @@ namespace CreateCuttingPunch.Services
 
             section1.SetAllowedEntityTypes(NXOpen.Section.AllowTypes.OnlyCurves);
 
-            NXOpen.Session.UndoMarkId markId2;
-            markId2 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "section mark");
-
-            NXOpen.Session.UndoMarkId markId3;
-            markId3 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, null);
-
             NXOpen.SelectionIntentRuleOptions selectionIntentRuleOptions1;
             selectionIntentRuleOptions1 = workPart.ScRuleFactory.CreateRuleOptions();
 
             selectionIntentRuleOptions1.SetSelectedFromInactive(false);
 
             NXOpen.Features.Feature[] features1 = new NXOpen.Features.Feature[1];
-            NXOpen.Features.SketchFeature sketchFeature1 = ((NXOpen.Features.SketchFeature)workPart.Features.FindObject("SKETCH(1)"));
+            //NXOpen.Features.SketchFeature sketchFeature1 = ((NXOpen.Features.SketchFeature)workPart.Features.FindObject("SKETCH(1)"));
+            NXOpen.Features.SketchFeature sketchFeature1 = AskSketchFeatureByName(sketchName);
             features1[0] = sketchFeature1;
             NXOpen.DisplayableObject nullNXOpen_DisplayableObject = null;
             NXOpen.CurveFeatureRule curveFeatureRule1;
             curveFeatureRule1 = workPart.ScRuleFactory.CreateRuleCurveFeature(features1, nullNXOpen_DisplayableObject, selectionIntentRuleOptions1);
 
             selectionIntentRuleOptions1.Dispose();
+
             section1.AllowSelfIntersection(true);
 
             section1.AllowDegenerateCurves(false);
 
-            NXOpen.SelectionIntentRule[] rules1 = new NXOpen.SelectionIntentRule[1];
-            rules1[0] = curveFeatureRule1;
-            NXOpen.NXObject nullNXOpen_NXObject = null;
-            NXOpen.Point3d helpPoint1 = new NXOpen.Point3d(105.83271217422272, 16.473689744866967, 0.0);
-            section1.AddToSection(rules1, nullNXOpen_NXObject, nullNXOpen_NXObject, nullNXOpen_NXObject, helpPoint1, NXOpen.Section.Mode.Create, false);
+            NXOpen.SelectionIntentRule[] rules1 = { curveFeatureRule1 };
 
-            theSession.DeleteUndoMark(markId3, null);
+            NXOpen.NXObject nullNXOpen_NXObject = null;
+            
+            NXOpen.Point3d helpPoint1 = new Point3d(0, 0, 0);
+            section1.AddToSection(rules1, nullNXOpen_NXObject, nullNXOpen_NXObject, nullNXOpen_NXObject, helpPoint1, NXOpen.Section.Mode.Create, false);
 
             extrudeBuilder1.BooleanOperation.Type = NXOpen.GeometricUtilities.BooleanOperation.BooleanType.Create;
 
@@ -194,84 +185,16 @@ namespace CreateCuttingPunch.Services
             NXOpen.Body[] targetBodies7 = new NXOpen.Body[0];
             extrudeBuilder1.BooleanOperation.SetTargetBodies(targetBodies7);
 
-            theSession.DeleteUndoMark(markId2, null);
-
-            NXOpen.Session.UndoMarkId markId4;
-            markId4 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Extrude");
-
-            theSession.DeleteUndoMark(markId4, null);
-
-            NXOpen.Session.UndoMarkId markId5;
-            markId5 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Extrude");
-
             extrudeBuilder1.ParentFeatureInternal = false;
 
-            NXOpen.Features.Feature feature1;
-            feature1 = extrudeBuilder1.CommitFeature();
-
-            theSession.DeleteUndoMark(markId5, null);
-
-            theSession.SetUndoMarkName(markId1, "Extrude");
+            NXOpen.Features.Feature extrudeFeature;
+            extrudeFeature = extrudeBuilder1.CommitFeature();
 
             NXOpen.Expression expression2 = extrudeBuilder1.Limits.StartExtend.Value;
             NXOpen.Expression expression3 = extrudeBuilder1.Limits.EndExtend.Value;
             extrudeBuilder1.Destroy();
 
             workPart.Expressions.Delete(expression1);
-
-            NXOpen.Point3d scaleAboutPoint1 = new NXOpen.Point3d(-44.872495534290152, 11.025077774677381, 0.0);
-            NXOpen.Point3d viewCenter1 = new NXOpen.Point3d(44.872495534290209, -11.02507777467752, 0.0);
-            workPart.ModelingViews.WorkView.ZoomAboutPoint(0.80000000000000004, scaleAboutPoint1, viewCenter1);
-
-            // ----------------------------------------------
-            //   Menu: Edit->Object Display...
-            // ----------------------------------------------
-            NXOpen.Session.UndoMarkId markId6;
-            markId6 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Start");
-
-            theSession.SetUndoMarkName(markId6, "Class Selection Dialog");
-
-            NXOpen.Session.UndoMarkId markId7;
-            markId7 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Class Selection");
-
-            theSession.DeleteUndoMark(markId7, null);
-
-            NXOpen.Session.UndoMarkId markId8;
-            markId8 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Class Selection");
-
-            theSession.DeleteUndoMark(markId8, null);
-
-            theSession.SetUndoMarkName(markId6, "Class Selection");
-
-            theSession.DeleteUndoMark(markId6, null);
-
-            // ----------------------------------------------
-            //   Dialog Begin Edit Object Display
-            // ----------------------------------------------
-            NXOpen.Session.UndoMarkId markId9;
-            markId9 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Start");
-
-            theSession.SetUndoMarkName(markId9, "Object Color Dialog");
-
-            // ----------------------------------------------
-            //   Dialog Begin Object Color
-            // ----------------------------------------------
-            NXOpen.Session.UndoMarkId markId10;
-            markId10 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Object Color");
-
-            theSession.DeleteUndoMark(markId10, null);
-
-            NXOpen.Session.UndoMarkId markId11;
-            markId11 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "Object Color");
-
-            theSession.DeleteUndoMark(markId11, null);
-
-            theSession.SetUndoMarkName(markId9, "Object Color");
-
-            theSession.DeleteUndoMark(markId9, null);
-
-            NXOpen.Session.UndoMarkId markId12;
-            markId12 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Visible, "Edit Object Display");
 
             NXOpen.DisplayModification displayModification1;
             displayModification1 = theSession.DisplayManager.NewDisplayModification();
@@ -285,14 +208,44 @@ namespace CreateCuttingPunch.Services
             displayModification1.NewWidth = NXOpen.DisplayableObject.ObjectWidth.Two;
 
             NXOpen.DisplayableObject[] objects1 = new NXOpen.DisplayableObject[1];
-            NXOpen.Body body1 = ((NXOpen.Body)workPart.Bodies.FindObject("EXTRUDE(2)"));
+            NXOpen.Body body1 = extrudeFeature.GetBodies().First();
             objects1[0] = body1;
             displayModification1.Apply(objects1);
 
-            int nErrs1;
-            nErrs1 = theSession.UpdateManager.DoUpdate(markId12);
-
             displayModification1.Dispose();
+        }
+
+        private SketchFeature AskSketchFeatureByName(string sketchName)
+        {
+            Session session = Session.GetSession();
+            Part workPart = session.Parts.Work;
+            Sketch targetSektch = null;
+            
+            //System.Diagnostics.Debugger.Launch();
+
+            foreach (var obj in workPart.Sketches)
+            {
+                if (obj is not Sketch sketch)
+                {
+                    continue;
+                }
+                else if(sketch.Name.Equals(sketchName, StringComparison.OrdinalIgnoreCase))
+                {
+                    targetSektch = sketch;
+                    break;
+                }
+            }
+
+            foreach (Feature feat in workPart.Features)
+            {
+                if(feat is SketchFeature sketchFeature &&
+                    sketchFeature.Sketch == targetSektch)
+                {
+                    return sketchFeature;
+                }
+            }
+
+            return null;
         }
 
         public void MakeSketchProjectCurve(ComponentCreationConfig config)
@@ -485,7 +438,7 @@ namespace CreateCuttingPunch.Services
             //NXOpen.Edge edge1 = ((NXOpen.Edge)component1.FindObject("PROTO#.Features|EXTRUDE(18)|EDGE * 170 EXTRUDE(2) 130 {(55,64.5,1.55)(53.5355339059327,68.0355339059327,1.55)(50,69.5,1.55) EXTRUDE(2)}"));
             TaggedObject sheet = config.SheetObject;
             Body sheetBody = sheet as Body;
-            Edge edge1 = sheetBody.GetEdges().First();            
+            Edge edge1 = sheetBody.GetEdges().First();
             NXOpen.Edge nullNXOpen_Edge = null;
             NXOpen.EdgeTangentRule edgeTangentRule1;
             edgeTangentRule1 = workPart.ScRuleFactory.CreateRuleEdgeTangent(edge1, nullNXOpen_Edge, true, 0.01, false, false, selectionIntentRuleOptions1);
@@ -596,6 +549,8 @@ namespace CreateCuttingPunch.Services
             theSession.Preferences.Sketch.SectionView = false;
 
             theSession.ActiveSketch.Deactivate(NXOpen.Sketch.ViewReorient.True, NXOpen.Sketch.UpdateLevel.Model);
+
+            AskSketchFeatureByName("MAIN");
         }
 
         public void ProjectProfile(ComponentCreationConfig config)
@@ -824,7 +779,7 @@ namespace CreateCuttingPunch.Services
                     }
                 }
             }
-            
+
             return null;
         }
 
