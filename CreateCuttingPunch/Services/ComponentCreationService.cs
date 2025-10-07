@@ -155,8 +155,7 @@ namespace CreateCuttingPunch.Services
 
             selectionIntentRuleOptions1.SetSelectedFromInactive(false);
 
-            NXOpen.Features.Feature[] features1 = new NXOpen.Features.Feature[1];
-            //NXOpen.Features.SketchFeature sketchFeature1 = ((NXOpen.Features.SketchFeature)workPart.Features.FindObject("SKETCH(1)"));
+            NXOpen.Features.Feature[] features1 = new NXOpen.Features.Feature[1];            
             NXOpen.Features.SketchFeature sketchFeature1 = AskSketchFeatureByName(sketchName);
             features1[0] = sketchFeature1;
             NXOpen.DisplayableObject nullNXOpen_DisplayableObject = null;

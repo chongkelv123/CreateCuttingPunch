@@ -22,12 +22,10 @@ namespace CreateCuttingPunch.Services
         public Action<Part, string> ColorAssignmentAction { get; set; }
         public string PartPropertiesType { get; set; } = PartType.INSERT;
         public string Material { get; set; } = Constants.Const.Material.DC53;
-        public string Hardness { get; set; } = HRC.HYPHEN;
+        public string Hardness { get; set; } = HRC.FIFTYEIGHT_SIXTY;
         public string Width { get; set; } = HRC.HYPHEN;
         public string Length { get; set; } = HRC.HYPHEN;
-        public string Thickness { get; set; } = HRC.HYPHEN;
-        //public Tag[] tagCurves { get; set; }
-        //public Tag[] tagPlanes { get; set; }
+        public string Thickness { get; set; } = HRC.HYPHEN;        
         public TaggedObject SheetObject { get; set; }
     }
 }

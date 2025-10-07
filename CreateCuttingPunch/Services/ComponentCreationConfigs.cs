@@ -14,10 +14,10 @@ namespace CreateCuttingPunch.Services
     public class ComponentCreationConfigs
     {
         public static ComponentCreationConfig CreatePunchConfig(
-            string folderPath, 
-            string fileName,            
+            string folderPath,
+            string fileName,
             ProjectInfoModel projectInfo,
-            string drawingCode, 
+            string drawingCode,
             string itemName,
             string length,
             TaggedObject SheetObject
@@ -35,8 +35,8 @@ namespace CreateCuttingPunch.Services
                 ItemName = itemName,
                 ColorAssignmentAction = AssignPlateColors,
                 PartPropertiesType = PartType.INSERT,
-                Material = Const.Material.GOA,
-                Hardness = HRC.FIFTYTWO_FIFTYFOUR,
+                Material = Const.Material.DC53,
+                Hardness = HRC.FIFTYEIGHT_SIXTY,
                 Length = length,
                 SheetObject = SheetObject
             };
@@ -47,7 +47,7 @@ namespace CreateCuttingPunch.Services
             foreach (Body body in workPart.Bodies)
             {
                 body.Color = (int)PunchColor.DARK_HARD_RED;
-            }            
+            }
         }
     }
 }
