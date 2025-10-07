@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Constants\Const.cs" />
     <Compile Include="Constants\PunchColor.cs" />
+    <Compile Include="Constants\ToolingStructureType.cs" />
     <Compile Include="Controller\Control.cs" />
     <Compile Include="Main\MyProgram.cs" />
     <Compile Include="Main\Unload.cs" />
@@ -82,6 +83,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\AttributeManagerService.cs" />
+    <Compile Include="Services\CodeGeneratorService.cs" />
     <Compile Include="Services\ComponentCreationConfig.cs" />
     <Compile Include="Services\ComponentCreationConfigs.cs" />
     <Compile Include="Services\ComponentCreationService.cs" />

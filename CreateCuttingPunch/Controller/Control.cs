@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using static CreateCuttingPunch.Constants.Const;
+using CreateCuttingPunch.Constants;
 using NXOpen.Assemblies;
 
 namespace CreateCuttingPunch.Controller
@@ -37,15 +37,34 @@ namespace CreateCuttingPunch.Controller
             Session session = Session.GetSession();
             Part workAssy = session.Parts.Work;
             Part displayPart = session.Parts.Display;
-            string mainAsmDisplayName = workAssy.Name;            
+            string mainAsmDisplayName = workAssy.Name;
 
-            string punchFileName = "TestNewPunch1";
+            var projectInfo = myForm.GetProjectInfo();
+            var codePrefix = projectInfo.CodePrefix;            
+            var stationNumber = CodeGeneratorService.StationNumberFromFileName(myForm.GetSubAsmName);
+            var dirPath = myForm.TextPath;
+            var itemName = CodeGeneratorService.ToUpperCase("Cutting Punch");
+            var type = ToolingStructureType.INSERT;
+
+            var drawingCode = CodeGeneratorService.GenerateDrawingCode(
+                type,
+                dirPath,
+                codePrefix,
+                stationNumber);
+
+            string punchFileName = CodeGeneratorService.GenerateFileName(
+                type,
+                dirPath,
+                codePrefix,
+                itemName,
+                stationNumber);
+
             Punch newPunch = new Punch();
             newPunch.FileName = punchFileName;
-            newPunch.FolderPath = myForm.TextPath + "\\";
-            newPunch.ProjectInfo = myForm.GetProjectInfo();
-            newPunch.DrawingCode = "123456-2401-0111";
-            newPunch.ItemName = "Cutting Punch";
+            newPunch.FolderPath = dirPath;
+            newPunch.ProjectInfo = projectInfo;
+            newPunch.DrawingCode = drawingCode;
+            newPunch.ItemName = itemName;
             newPunch.SheetObject = myForm.GetSheetObject;
             newPunch.Length = myForm.GetPunchLength;
 
@@ -54,9 +73,7 @@ namespace CreateCuttingPunch.Controller
             string subAsmFullPath = myForm.GetSubAsmPath;
 
             try
-            {
-                //System.Diagnostics.Debugger.Launch();
-
+            {                
                 Part targetSubAsmComponent = SetActivePart(myForm.GetSubAsmName);
 
                 Point3d position = new Point3d(100, 0, 137.55);
