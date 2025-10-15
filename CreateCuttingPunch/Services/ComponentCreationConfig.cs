@@ -27,5 +27,6 @@ namespace CreateCuttingPunch.Services
         public string Length { get; set; } = HRC.HYPHEN;
         public string Thickness { get; set; } = HRC.HYPHEN;        
         public TaggedObject SheetObject { get; set; }
+        public NXObject WaveLinkerObject { get; set; }
     }
 }

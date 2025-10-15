@@ -47,7 +47,9 @@ namespace CreateCuttingPunch.Model
             var config = getConfig;
 
             var creationService = new ComponentCreationService();
-            creationService.MakeSketchProjectCurve(config);
+            //creationService.MakeSketchProjectCurve(config);
+            //creationService.MakeSketchProjectFaceEdge(config);
+            creationService.ProfileGenerateManager(config);
         }
 
         public void Extrude(string sketchName = "MAIN")
