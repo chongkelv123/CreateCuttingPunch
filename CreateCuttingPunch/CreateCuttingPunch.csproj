@@ -88,7 +88,7 @@
     <Compile Include="Services\ComponentCreationConfigs.cs" />
     <Compile Include="Services\ComponentCreationService.cs" />
     <Compile Include="Services\ComponentInsertService.cs" />
-    <Compile Include="Services\FileManageService.cs" />
+    <Compile Include="Services\FileManagerService.cs" />
     <Compile Include="Services\ProjectInfoService.cs" />
     <Compile Include="Services\SelectionServices.cs" />
     <Compile Include="Services\VersionFilterService.cs" />

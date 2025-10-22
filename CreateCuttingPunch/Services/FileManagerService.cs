@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CreateCuttingPunch.Services
 {
-    public class FileManageService
+    public class FileManagerService
     {
         /// <summary>
         /// Gets all .prt files from the specified path and filters to keep only latest versions

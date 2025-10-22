@@ -249,7 +249,7 @@ namespace CreateCuttingPunch.View
             try
             {
                 Part workPart = Session.GetSession().Parts.Work;
-                TextPath = FileManageService.GetCurrentDirectory(workPart);
+                TextPath = FileManagerService.GetCurrentDirectory(workPart);
 
                 // Populate ListView with assembly files
                 PopulateAssemblyListView();
@@ -276,7 +276,7 @@ namespace CreateCuttingPunch.View
                 }
 
                 // Get assembly files using your service
-                var assemblyFiles = FileManageService.GetAssemblyFiles(TextPath);
+                var assemblyFiles = FileManagerService.GetAssemblyFiles(TextPath);
 
                 // Configure ListView if not already configured
                 ConfigureListView();

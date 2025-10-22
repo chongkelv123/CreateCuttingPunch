@@ -36,7 +36,7 @@ namespace CreateCuttingPunch.Services.Tests
             };
 
             // Act
-            var result = FileManageService.GetAssemblyFiles(path);
+            var result = FileManagerService.GetAssemblyFiles(path);
 
             // Assert
             Assert.AreEqual(expected.Count, result.Count, "Filtered list should have correct count");            
